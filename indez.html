@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baleia Livros - Plataforma de Histórias e Mangás</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMTJDOCA4IDEwIDYgMTQgNkMxOCA2IDIwIDggMjAgMTJDMTggMTQgMTYgMTQgMTQgMTRDMTIgMTQgMTAgMTQgOCA4WiIgZmlsbD0iIzY2MzM5OSI+PC9wYXRoPgo8cGF0aCBkPSJNMjAgOEMxOCA2IDE0IDYxMCA2IDggOFMxMiA0IDE2IDRDMTggNCAyMCA2IDIwIDhaIiBmaWxsPSIjOTMzNGVhIi8+CjxwYXRoIGQ9Ik0yMiAxMkMyMiAxNCAyMCAxNiAyMCAyMEMyMCAyNCAyMiAyNiAyNCAyNkMyNiAyNiAyOCAyNCAyOCAyMEMyOCAxNiAyNiAxNCAyNiAxMkMyNiAxMCAyNCAxMCAyMiAxMEMyMCAxMCAyMiAxMCAyMiAxMloiIGZpbGw9IiM5MzM0ZWEiLz4KPHBhdGggZD0iTTI0IDE2QzI0IDE4IDIyIDIwIDIyIDIyQzIyIDI0IDI0IDI2IDI2IDI2QzI4IDI2IDMwIDI0IDMwIDIyQzMwIDIwIDI4IDE4IDI4IDE2QzI4IDE0IDI2IDE0IDI0IDE0QzIyIDE0IDI0IDE0IDI0IDE2WiIgZmlsbD0iIzY2MzM5OSI+PC9wYXRoPgo8L3N2Zz4=" type="image/svg+xml">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c3e50, #6a0dad, #9b59b6);
+            color: #ecf0f1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        /* Efeitos de brilho e glitter */
+        .glitter-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: pulse 4s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .glitter-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            box-shadow: 0 0 10px #ffd700;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        header {
+            background: rgba(44, 62, 80, 0.9);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 15px #ffd700;
+        }
+        .whale-icon {
+            width: 60px;
+            height: 60px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDVDMjUgMCAyMCA1IDIwIDE1QzIwIDI1IDI1IDMwIDMwIDMwQzM1IDMwIDQwIDI1IDQwIDE1QzQwIDUgMzUgMCAzMCAwWiIgZmlsbD0iIzY2MzM5OSI+PC9wYXRoPgo8cGF0aCBkPSJNMzAgMTVDMjUgMTUgMjAgMjAgMjAgMzBDMjAgNDAgMjUgNDUgMzAgNDVDMzUgNDUgNDAgNDAgNDAgMzBDNDAgMjAgMzUgMTUgMzAgMTVaIiBmaWxsPSIjOTMzNGVhIi8+CjxwYXRoIGQ9Ik00MCAyMEM0MCAyNSAzNSAzMCAzNSAzNUMzNSAzNSA0MCAzMCA0MCAyNVoiIGZpbGw9IiM2NjMzOTkiLz4KPHBhdGggZD0iTTIwIDIwQzIwIDI1IDI1IDMwIDI1IDM1QzI1IDM1IDIwIDMwIDIwIDI1WiIgZmlsbD0iIzY2MzM5OSI+PC9wYXRoPgo8cGF0aCBkPSJNMzAgMzVDMzAgNDAgMzUgNDAgMzUgMzVaIiBmaWxsPSIjZmZkNzAwIi8+Cjwvc3ZnPg==') no-repeat center;
+            background-size: contain;
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        nav a:hover {
+            background: #ffd700;
+            color: #2c3e50;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .hero h1 {
+            font-size: 3.5em;
+            margin: 0;
+            text-shadow: 0 0 20px #ffd700;
+        }
+        .hero p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .hero .cta-button {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #2c3e50;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .hero .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel-item {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        .carousel-item:hover {
+            transform: scale(1.05);
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .carousel-item .content {
+            padding: 15px;
+        }
+        .carousel-item h3 {
+            margin: 0;
+            color: #ffd700;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .book-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        .book-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .book-card .info {
+            padding: 20px;
+        }
+        .book-card h3 {
+            margin: 0 0 10px 0;
+            color: #ffd700;
+        }
+        .book-card p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .book-card .rating {
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        form input, form textarea {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ecf0f1;
+            font-size: 1em;
+        }
+        form textarea {
+            grid-column: span 2;
+        }
+        form button {
+            grid-column: span 2;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #2c3e50;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            background: rgba(44, 62, 80, 0.9);
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            .book-grid {
+                grid-template-columns: 1fr;
+            }
+            form {
+                grid-template-columns: 1fr;
+            }
+            form textarea, form button {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glitter-bg"></div>
+    <header>
+        <div class="logo">
+            <div class="whale-icon"></div>
+            Baleia Livros
+        </div>
+        <nav>
+            <a href="#home">Início</a>
+            <a href="#publish">Publicar</a>
+            <a href="#books">Livros</a>
+            <a href="#about">Sobre</a>
+        </nav>
+    </header>
+    <main>
+        <section id="home" class="hero">
+            <h1>Descubra Histórias Incríveis</h1>
+            <p>Mergulhe em um mundo de livros e mangás roxos e brilhantes. Leia, publique e conecte-se com autores!</p>
+            <button class="cta-button" onclick="document.getElementById('books').scrollIntoView({behavior: 'smooth'})">Explorar Livros</button>
+        </section>
+        <section>
+            <h2>Destaques</h2>
+            <div class="carousel">
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/300x200/8e44ad/fff?text=Mangá+1" alt="Mangá Destaque">
+                    <div class="content">
+                        <h3>Mangá Fantasia</h3>
+                        <p>Uma aventura épica em um mundo roxo.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/300x200/9b59b6/fff?text=Romance+1" alt="Romance Destaque">
+                    <div class="content">
+                        <h3>História de Amor</h3>
+                        <p>Romance apaixonante com toques mágicos.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/300x200/6a0dad/fff?text=Ficção+1" alt="Ficção Destaque">
+                    <div class="content">
+                        <h3>Ficção Científica</h3>
+                        <p>Viagens no tempo e universos paralelos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="publish">
+            <h2>Publique Sua História</h2>
+            <form id="publish-form">
+                <input type="text" placeholder="Título" required>
+                <input type="text" placeholder="Autor" required>
+                <textarea placeholder="Descrição" rows="4" required></textarea>
+                <input type="file" accept="image/*" placeholder="Capa">
+                <button type="submit">Publicar</button>
+            </form>
+        </section>
+        <section id="books">
+            <h2>Livros e Mangás</h2>
+            <div class="book-grid" id="book-list">
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/250x300/8e44ad/fff?text=Livro+1" alt="Livro 1">
+                    <div class="info">
+                        <h3>Título Exemplo</h3>
+                        <p>Autor: Exemplo</p>
+                        <p>Gênero: Fantasia</p>
+                        <div class="rating">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/250x300/9b59b6/fff?text=Mangá+1" alt="Mangá 1">
+                    <div class="info">
+                        <h3>Mangá Roxo</h3>
+                        <p>Autor: Artista</p>
+                        <p>Gênero: Aventura</p>
+                        <div class="rating">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about">
+            <h2>Sobre o Baleia Livros</h2>
+            <p>Oferecemos um espaço roxo e brilhante para histórias e mangás. Publique, leia e compartilhe!</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Baleia Livros. Todos os direitos reservados.</p>
+    </footer>
+    <script>
+        // Adicionar glitter dinâmico
+        function createGlitter() {
+            const bg = document.querySelector('.glitter-bg');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'glitter-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                bg.appendChild(particle);
+            }
